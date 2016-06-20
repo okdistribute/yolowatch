@@ -1,0 +1,16 @@
+{
+  "name": "yolowatch",
+  "version": "1.0.0",
+  "description": "watch with yolo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "filewatcher": "^3.0.0",
+    "folder-walker": "^2.1.1",
+    "stream-each": "^1.1.2"
+  }
+}
