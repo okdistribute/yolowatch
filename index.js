@@ -1,29 +1,33 @@
 var filewatcher = require('filewatcher')
 var from = require('from2')
+var events = require('events')
 var each = require('stream-each')
 var path = require('path')
 var walker = require('folder-walker')
 
 module.exports = function yoloWatch (root) {
+  var yolo = new events.EventEmitter()
   var stats = {}
   var dirs = filewatcher()
-  dirs.on('change', kick)
+  dirs.on('change', function () {
+    kick(root, false)
+  })
   dirs.add(root)
-  kick(root)
+  kick(root, true)
 
   var watcher = filewatcher()
-  return from.obj(read)
+  watcher.on('change', fileChanged)
+  return yolo
 
-  function read (size, cb) {
-    watcher.on('change', function (filepath, stat) {
-      fileChanged(filepath, stat, cb)
-    })
-  }
-
-  function kick (dir) {
+  function kick (dir, first) {
+    // find any new files
     var fileStream = walker(dir)
     each(fileStream, function (data, next) {
-      if (!stats[data.filepath]) watcher.add(data.filepath)
+      if (!stats[data.filepath]) {
+        // new file
+        if (!first) yolo.emit('added', data)
+        watcher.add(data.filepath)
+      }
       stats[data.filepath] = data
       next()
     }, function (err) {
@@ -31,20 +35,14 @@ module.exports = function yoloWatch (root) {
     })
   }
 
-  function fileChanged (filepath, stat, cb) {
-    var item = {
-      root: root,
-      filepath: filepath,
-      stat: stat,
-      relname: root === filepath ? path.basename(name) : path.relative(root, filepath),
-      basename: path.basename(filepath)
+  function fileChanged (filepath, stat) {
+    if (!stat || stat.deleted) {
+      stats[filepath] = null
+      yolo.emit('deleted', info)
     }
-    if (!stat || stat.deleted) item.type = 'deleted'
-    else if (stat.isFile()) {
-      item.type = 'file'
+    else {
+      stats[filepath].stat = stat
+      yolo.emit('changed', item)
     }
-    else if (stat.isDirectory()) item.type = 'directory'
-
-    cb(null, item)
   }
 }
