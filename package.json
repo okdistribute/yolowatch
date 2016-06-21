@@ -1,7 +1,7 @@
 {
   "name": "yolowatch",
   "version": "1.0.0",
-  "description": "watch with yolo",
+  "description": "watch filesystem changes yolostyle",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
