@@ -11,6 +11,7 @@
   "dependencies": {
     "filewatcher": "^3.0.0",
     "folder-walker": "^2.1.1",
+    "from2": "^2.1.1",
     "stream-each": "^1.1.2"
   }
 }

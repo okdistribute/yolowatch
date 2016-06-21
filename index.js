@@ -12,11 +12,14 @@ module.exports = function yoloWatch (root) {
   kick(root)
 
   var watcher = filewatcher()
+  return from.obj(read)
+
   function read (size, cb) {
     watcher.on('change', function (filepath, stat) {
       fileChanged(filepath, stat, cb)
     })
   }
+
   function kick (dir) {
     var fileStream = walker(dir)
     each(fileStream, function (data, next) {
@@ -36,14 +39,12 @@ module.exports = function yoloWatch (root) {
       relname: root === filepath ? path.basename(name) : path.relative(root, filepath),
       basename: path.basename(filepath)
     }
-    var isFile = stat.isFile()
-    if (isFile) {
+    if (!stat || stat.deleted) item.type = 'deleted'
+    else if (stat.isFile()) {
       item.type = 'file'
     }
-    var isDir = stat.isDirectory()
-    if (isDir) item.type = 'directory'
+    else if (stat.isDirectory()) item.type = 'directory'
 
     cb(null, item)
   }
-  return from.obj(read)
 }
