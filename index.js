@@ -25,7 +25,7 @@ module.exports = function yoloWatch (root) {
     each(fileStream, function (data, next) {
       if (!stats[data.filepath]) {
         // new file
-        if (!first) yolo.emit('added', data)
+        if (!first) yolo.emit('added', data.filepath, data)
         watcher.add(data.filepath)
       }
       stats[data.filepath] = data
@@ -38,11 +38,10 @@ module.exports = function yoloWatch (root) {
   function fileChanged (filepath, stat) {
     if (!stat || stat.deleted) {
       stats[filepath] = null
-      yolo.emit('deleted', info)
-    }
-    else {
+      yolo.emit('deleted', filepath, stat)
+    } else {
       stats[filepath].stat = stat
-      yolo.emit('changed', item)
+      yolo.emit('changed', filepath, stat)
     }
   }
 }
