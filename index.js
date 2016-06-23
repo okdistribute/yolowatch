@@ -1,21 +1,19 @@
 var filewatcher = require('filewatcher')
-var from = require('from2')
 var events = require('events')
 var each = require('stream-each')
-var path = require('path')
 var walker = require('folder-walker')
 
-module.exports = function yoloWatch (root) {
+module.exports = function yoloWatch (root, opts) {
   var yolo = new events.EventEmitter()
   var stats = {}
-  var dirs = filewatcher()
+  var dirs = filewatcher(opts)
   dirs.on('change', function () {
     kick(root, false)
   })
   dirs.add(root)
   kick(root, true)
 
-  var watcher = filewatcher()
+  var watcher = filewatcher(opts)
   watcher.on('change', fileChanged)
   return yolo
 
