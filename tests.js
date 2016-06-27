@@ -22,11 +22,11 @@ test('prep', function (t) {
 })
 
 test('file is updated', function (t) {
-  watcher.on('changed', function (file, stat) {
+  watcher.on('changed', function (file, data) {
     t.plan(2)
     if (file !== fStart) return false
     t.equal(file, fStart)
-    t.ok(stat.mtime > 0, 'mtime > 0')
+    t.ok(data.stat.mtime > 0, 'mtime > 0')
   })
   touch(fStart)
 })
@@ -34,7 +34,7 @@ test('file is updated', function (t) {
 test('new file added', function (t) {
   var f
   f = createFile()
-  watcher.on('added', function (file, stat) {
+  watcher.on('added', function (file, data) {
     if (file !== f) return false
     t.equal(file, f)
     t.end()

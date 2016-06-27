@@ -36,10 +36,10 @@ module.exports = function yoloWatch (root, opts) {
   function fileChanged (filepath, stat) {
     if (!stat || stat.deleted) {
       stats[filepath] = null
-      yolo.emit('deleted', filepath, stat)
+      yolo.emit('deleted', filepath)
     } else {
       stats[filepath].stat = stat
-      yolo.emit('changed', filepath, stat)
+      yolo.emit('changed', filepath, stats[filepath])
     }
   }
 }
