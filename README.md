@@ -13,7 +13,7 @@ npm install yolowatch
 ```js
 var yolowatch = require('yolowatch')
 
-var watcher = yolowatch('/path/to/my/dir')
+var watcher = yolowatch('/path/to/my/dir', opts)
 
 watcher.on('changed', function (file, data) {
   console.log(file, 'was changed')
@@ -42,7 +42,12 @@ Example `data` in callback (see folder-walker):
 }
 ```
 
+### Options
+
+* Second argument, `opts`, is passed to filewatcher.
+* Ignore files: `opts.filter` passed to folder-walker.
+
 ### Todo
 
-* expose options to pass to filewatcher module
+* expose options to pass to filewatcher module (check this)
 * function to remove directory & children from being watched.

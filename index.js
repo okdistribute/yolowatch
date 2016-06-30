@@ -4,6 +4,7 @@ var each = require('stream-each')
 var walker = require('folder-walker')
 
 module.exports = function yoloWatch (root, opts) {
+  var filter = opts && opts.filter || function (filename) { return true }
   var yolo = new events.EventEmitter()
   var stats = {}
   var dirs = filewatcher(opts)
@@ -19,7 +20,7 @@ module.exports = function yoloWatch (root, opts) {
 
   function kick (dir, first) {
     // find any new files
-    var fileStream = walker(dir)
+    var fileStream = walker(dir, {filter: filter})
     each(fileStream, function (data, next) {
       if (!stats[data.filepath]) {
         // new file
