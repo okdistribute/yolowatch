@@ -27,6 +27,8 @@ watcher.on('deleted', function (file) {
 watcher.on('added', function (file, data) {
   console.log(file, 'was added')
 })
+
+watcher.close() // remove all listeners
 ```
 
 Example `data` in callback (see folder-walker):
@@ -46,8 +48,3 @@ Example `data` in callback (see folder-walker):
 
 * Second argument, `opts`, is passed to filewatcher.
 * Ignore files: `opts.filter` passed to folder-walker.
-
-### Todo
-
-* expose options to pass to filewatcher module (check this)
-* function to remove directory & children from being watched.
