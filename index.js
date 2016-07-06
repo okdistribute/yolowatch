@@ -16,6 +16,12 @@ module.exports = function yoloWatch (root, opts) {
 
   var watcher = filewatcher(opts)
   watcher.on('change', fileChanged)
+
+  yolo.close = function () {
+    dirs.removeAll()
+    watcher.removeAll()
+  }
+
   return yolo
 
   function kick (dir, first) {

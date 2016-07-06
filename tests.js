@@ -6,7 +6,6 @@ var rimraf = require('rimraf')
 var yoloWatch = require('.')
 
 var dir = path.join(os.tmpdir(), 'yolotest')
-var opts = {persistent: false}
 
 var i = 0
 var fStart
@@ -16,7 +15,7 @@ test('prep', function (t) {
   rimraf(dir, function () {
     fs.mkdirSync(dir)
     fStart = createFile()
-    watcher = yoloWatch(dir, opts)
+    watcher = yoloWatch(dir)
     t.end()
   })
 })
@@ -39,6 +38,12 @@ test('new file added', function (t) {
     t.equal(file, f)
     t.end()
   })
+})
+
+test('close removes listeners', function (t) {
+  t.doesNotThrow(watcher.close, 'close ok')
+  t.timeoutAfter(100)
+  t.end()
 })
 
 function createFile () {
